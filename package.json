@@ -1,0 +1,31 @@
+{
+  "name": "conversation-with-facebook",
+  "version": "1.0.0",
+  "description": "Using Watson Conversation with Facebook Messenger",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "request": "^2.83.0",
+    "watson-developer-cloud": "^2.42.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sayurimizuguchi/conversation-with-facebook.git"
+  },
+  "keywords": [
+    "watson-conversation",
+    "node.js",
+    "facebook"
+  ],
+  "author": "Sayuri Mizuguchi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sayurimizuguchi/conversation-with-facebook/issues"
+  },
+  "homepage": "https://github.com/sayurimizuguchi/conversation-with-facebook#readme"
+}
