@@ -4,12 +4,12 @@ var bodyParser = require('body-parser'); // parser for post requests
 var watson = require('watson-developer-cloud/conversation/v1'); // using only conversation service
 
 // server config
-var token = process.env.TOKEN || "Or paste your FB token here";
-var host = process.env.VCAP_APP_HOST || 'localhost';
-var port = process.env.VCAP_APP_PORT || 3000;
+const token = process.env.TOKEN || "Or paste your FB token here";
+const host = process.env.VCAP_APP_HOST || 'localhost';
+const port = process.env.VCAP_APP_PORT || 3000;
 
 var app = express();
-var contextID = "";
+const contextID = "";
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -22,7 +22,7 @@ var conversation = watson.conversation({
     version_date: '2017-05-26'
 });
 
-var workspace = process.env.WORKSPACE_ID || 'Or paste your workspace_id here';
+const workspace = process.env.WORKSPACE_ID || 'Or paste your workspace_id here';
 
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'Paste your FB token here') {
