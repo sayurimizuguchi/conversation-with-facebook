@@ -29,7 +29,7 @@ var conversation = new Conversation({
 });
 
 app.get('/webhook/', (req, res) => {
-    if (req.query['hub.verify_token'] === 'EAACwpSURYj0BAL5FKEZA2pHbt4N9gfv8ikW9gvDs4B7tZBXA4iVTZBojD2SuIAwR1ivAMebaIUTcHQuHZA51m2iO2Lg54s6ZCK9FgjHaULzSgCuxyk2LQDCb0L98ZBvh5QuZALqi4hYxfIZCJuzY2FCbgqkxvc7KOuyVsueBozdbxAZDZD') {
+    if (req.query['hub.verify_token'] === 'paste your token here') {
         res.send(req.query['hub.challenge']);
     }
     res.send('Error when we try to validating your token.');
