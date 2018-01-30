@@ -2,13 +2,13 @@
 
 require('dotenv').config({ silent: true });
 
-var express = require('express'); //app server
+const express = require('express'); //app server
 var request = require('request'); //request module to make http requests
 var bodyParser = require('body-parser'); // parser for post requests
 var Conversation = require('watson-developer-cloud/conversation/v1'); // watson sdk, using only conversation service
 
 // server  express config
-var app = express();
+const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const host = process.env.VCAP_APP_HOST || 'localhost'; //vcap for bluemix/cloud
@@ -28,17 +28,16 @@ var conversation = new Conversation({
     version_date: '2017-05-26'
 });
 
-app.get('/webhook/', function(req, res) {
+app.get('/webhook/', (req, res) => {
     if (req.query['hub.verify_token'] === 'EAACwpSURYj0BAL5FKEZA2pHbt4N9gfv8ikW9gvDs4B7tZBXA4iVTZBojD2SuIAwR1ivAMebaIUTcHQuHZA51m2iO2Lg54s6ZCK9FgjHaULzSgCuxyk2LQDCb0L98ZBvh5QuZALqi4hYxfIZCJuzY2FCbgqkxvc7KOuyVsueBozdbxAZDZD') {
         res.send(req.query['hub.challenge']);
     }
     res.send('Error when we try to validating your token.');
 });
 
-const contextID = "";
-app.post('/webhook/', function(req, res) {
+var contextID = "";
+app.post('/webhook/', (req, res) => {
     var text = null;
-
     messaging_events = req.body.entry[0].messaging;
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i];
@@ -50,7 +49,7 @@ app.post('/webhook/', function(req, res) {
             text = event.postback.payload;
         } else {
             break;
-        }
+        }    
 
         var params = {
             input: text,
@@ -77,7 +76,7 @@ app.post('/webhook/', function(req, res) {
 
 function callMessage(payload, res) {
     var conversation_id = "";
-    conversation.message(payload, function(err, responseMessage) {
+    conversation.message(payload, (err, responseMessage) => {
         console.log(responseMessage);
         contextID = responseMessage.context;
 
@@ -108,7 +107,7 @@ function sendMessage(res, outputText) {
         }
     };
 
-    request(dataPost, function(error, response, body) {
+    request(dataPost, (error, response, body) => {
         if (error) {
             console.log('Error when we try to sending message: ', error);
         } else if (response.body.error) {
