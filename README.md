@@ -27,4 +27,4 @@ Basic example of how to Integrate Watson Assistant (Formerly Conversation) with 
 
 ### Useful links
 - Watson Assistant [API docs](https://cloud.ibm.com/apidocs/assistant?code=node#introduction).
-- Facebook config [tutorial[(https://developer.ibm.com/tutorials/fb-messenger-wcs-botkit/).
+- Facebook config [tutorial](https://developer.ibm.com/tutorials/fb-messenger-wcs-botkit/).
