@@ -24,3 +24,7 @@ Basic example of how to Integrate Watson Assistant (Formerly Conversation) with 
 - Sent a message for your page and have fun! :heart_eyes:
 
 #### Note: When you are at step `New Page Subscription` on facebook page, remember to put the URL of your deployment on IBM Cloud
+
+### Useful links
+- Watson Assistant [API docs](https://cloud.ibm.com/apidocs/assistant?code=node#introduction).
+- Facebook config [tutorial[(https://developer.ibm.com/tutorials/fb-messenger-wcs-botkit/).
