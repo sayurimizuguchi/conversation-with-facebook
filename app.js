@@ -1,42 +1,32 @@
 'use strict';
 
 require('dotenv').config({ silent: true });
-
+import { env } from 'utils';
 const express = require('express'); //app server
-var request = require('request'); //request module to make http requests
-var bodyParser = require('body-parser'); // parser for post requests
-var Conversation = require('watson-developer-cloud/conversation/v1'); // watson sdk, using only conversation service
+const request = require('request'); //request module to make http requests
+const bodyParser = require('body-parser'); // parser for post requests
+const AssistantV1 = require('ibm-watson/assistant/v1'); // watson sdk, using only conversation service
 
 // server  express config
-const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-const host = process.env.VCAP_APP_HOST || 'localhost'; //vcap for bluemix/cloud
-const port = process.env.VCAP_APP_PORT || 3000; //vcap port for bluemix/cloud
+const server = express();
+server.use(bodyParser.urlencoded({ extended: false }));
+server.use(bodyParser.json());
 
-//facebook token generated
-const token = process.env.TOKEN || "Or paste your FB token here";
-
-//Workspace from your Conversation Service
-const workspace = process.env.WORKSPACE_ID || 'Or paste your workspace_id here';
-
-var conversation = new Conversation({
-    url: 'https://gateway.watsonplatform.net/conversation/api',
-    username: process.env.CONVERSATION_USERNAME || 'Or paste here your username',
-    password: process.env.CONVERSATION_PASSWORD || 'Or paste here your password',
-    version: 'v1',
-    version_date: '2017-05-26'
+const wAssistant = new AssistantV1({
+	version: env.version,
+    username: env.username,
+    password: env.password, 
+	url: env.url
 });
 
-app.get('/webhook/', (req, res) => {
+server.get('/webhook/', (req, res) => {
     if (req.query['hub.verify_token'] === 'paste your token here') {
         res.send(req.query['hub.challenge']);
     }
     res.send('Error when we try to validating your token.');
 });
 
-var contextID = "";
-app.post('/webhook/', (req, res) => {
+server.post('/webhook/', (req, res) => {
     var text = null;
     messaging_events = req.body.entry[0].messaging;
     for (i = 0; i < messaging_events.length; i++) {
@@ -53,11 +43,11 @@ app.post('/webhook/', (req, res) => {
 
         var params = {
             input: text,
-            context: contextID
+            context: ""
         };
 
         var payload = {
-            workspace_id: workspace
+            workspace_id: env.workspace || "or paste it here"
         };
 
         if (params) {
@@ -74,9 +64,9 @@ app.post('/webhook/', (req, res) => {
     res.sendStatus(200);
 });
 
-function callMessage(payload, res) {
-    var conversation_id = "";
-    conversation.message(payload, (err, responseMessage) => {
+const callMessage = (payload, res) => {
+    let conversation_id = "";
+    return wAssistant.message(payload, (err, responseMessage) => {
         console.log(responseMessage);
         contextID = responseMessage.context;
 
@@ -85,7 +75,7 @@ function callMessage(payload, res) {
         if (responseMessage.context != null) conversation_id = responseMessage.context.conversation_id;
 
         if (responseMessage != null && responseMessage.output != null) {
-            var i = 0;
+            let i = 0;
             while (i < responseMessage.output.text.length) {
                 sendMessage(res, responseMessage.output.text[i++]);
             }
@@ -93,13 +83,13 @@ function callMessage(payload, res) {
     });
 }
 
-function sendMessage(res, outputText) {
+const sendMessage = (res, outputText) => {
     outputText = outputText.substring(0, 319);
     messageData = { text: outputText };
 
-    var dataPost = {
+    let dataPost = {
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: token },
+        qs: { access_token: env.token },
         method: 'POST',
         json: {
             recipient: { id: res },
@@ -107,7 +97,7 @@ function sendMessage(res, outputText) {
         }
     };
 
-    request(dataPost, (error, response, body) => {
+    return request(dataPost, (error, response, body) => {
         if (error) {
             console.log('Error when we try to sending message: ', error);
         } else if (response.body.error) {
@@ -116,6 +106,6 @@ function sendMessage(res, outputText) {
     });
 }
 
-app.listen(port, host, function() {
-    console.log('Server running on port: %d', port);
+server.listen(env.port, env.host, () => {
+    console.log('Server running on port: %d', env.port);
 });

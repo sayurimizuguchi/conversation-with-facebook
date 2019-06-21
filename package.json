@@ -7,11 +7,12 @@
     "body-parser": "^1.18.2",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
-    "request": "^2.83.0",
-    "watson-developer-cloud": "^2.42.0"
+    "ibm-watson": "^4.2.1",
+    "request": "^2.83.0"
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node app",
     "test": "npm test"
   },
   "repository": {
